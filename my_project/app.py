@@ -10,19 +10,21 @@ import streamlit as st
 
 
 # ============================================================
-# CONFIGURATION & CONSTANTS
+# CONFIGURATION
 # ============================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# IMPORTANT:
-# The trained model must be inside the same folder as app.py
-MODEL_PATH = os.path.join(BASE_DIR, "plant_disease_baseline.keras")
+# IMPORTANT: model must be in the same folder as app.py
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "plant_disease_baseline.keras"
+)
 
 IMG_SIZE = (128, 128)
 
-# Confidence threshold for reliable diagnosis
 CONFIDENCE_THRESHOLD = 0.60
+
 
 CLASS_NAMES = [
     "Pepper__bell___Bacterial_spot",
@@ -39,7 +41,7 @@ CLASS_NAMES = [
     "Tomato__Target_Spot",
     "Tomato__Tomato_YellowLeaf__Curl_Virus",
     "Tomato__Tomato_mosaic_virus",
-    "Tomato_healthy",
+    "Tomato_healthy"
 ]
 
 
@@ -48,6 +50,7 @@ CLASS_NAMES = [
 # ============================================================
 
 RECOMMENDATIONS = {
+
     "Pepper__bell___Bacterial_spot": {
         "title": "Pepper Bacterial Spot",
         "crop": "Bell Pepper",
@@ -59,9 +62,9 @@ RECOMMENDATIONS = {
             "Avoid overhead sprinkler irrigation.",
             "Ensure adequate plant spacing for good air circulation.",
             "Sanitize pruning tools between plants.",
-            "Apply copper-based bactericides only according to local agricultural guidance.",
+            "Apply copper-based bactericides according to local agricultural guidance."
         ],
-        "prevention": "Rotate crops with non-solanaceous species and use certified disease-free seeds.",
+        "prevention": "Rotate crops with non-solanaceous species and use certified disease-free seeds."
     },
 
     "Pepper__bell___healthy": {
@@ -74,9 +77,9 @@ RECOMMENDATIONS = {
             "Maintain consistent soil moisture without waterlogging.",
             "Provide balanced plant nutrition.",
             "Monitor regularly for insects and leaf symptoms.",
-            "Provide adequate sunlight.",
+            "Provide adequate sunlight."
         ],
-        "prevention": "Keep beds clean and inspect new seedlings before transplanting.",
+        "prevention": "Keep beds clean and inspect new seedlings before transplanting."
     },
 
     "Potato___Early_blight": {
@@ -89,10 +92,10 @@ RECOMMENDATIONS = {
             "Remove severely affected lower leaves.",
             "Water at the base of the plant.",
             "Use mulch to reduce soil splash.",
-            "Apply approved fungicides according to local label instructions.",
-            "Maintain adequate plant nutrition.",
+            "Apply approved fungicides according to label instructions.",
+            "Maintain adequate plant nutrition."
         ],
-        "prevention": "Practice crop rotation and remove volunteer potato and nightshade plants.",
+        "prevention": "Practice crop rotation and remove volunteer potato and nightshade plants."
     },
 
     "Potato___Late_blight": {
@@ -100,15 +103,15 @@ RECOMMENDATIONS = {
         "crop": "Potato",
         "status": "Diseased",
         "pathogen": "Phytophthora infestans",
-        "description": "A rapidly developing disease producing water-soaked to dark lesions, especially under cool and wet conditions.",
+        "description": "A rapidly developing disease producing water-soaked to dark lesions under cool and wet conditions.",
         "actions": [
             "Remove severely infected foliage.",
             "Avoid overhead watering.",
             "Avoid working with wet foliage.",
             "Use fungicides recommended by local agricultural authorities.",
-            "Monitor neighboring potato and tomato plants.",
+            "Monitor neighboring potato and tomato plants."
         ],
-        "prevention": "Use certified seed tubers and resistant varieties where available.",
+        "prevention": "Use certified seed tubers and resistant varieties where available."
     },
 
     "Potato___healthy": {
@@ -116,14 +119,14 @@ RECOMMENDATIONS = {
         "crop": "Potato",
         "status": "Healthy",
         "pathogen": "None",
-        "description": "The image does not show symptoms associated with the potato diseases represented in this model.",
+        "description": "No major symptoms associated with the potato diseases represented in this model were detected.",
         "actions": [
             "Maintain appropriate soil moisture.",
             "Maintain good drainage.",
             "Monitor regularly for insects and disease symptoms.",
-            "Continue appropriate hilling and crop maintenance.",
+            "Continue appropriate hilling and crop maintenance."
         ],
-        "prevention": "Use certified seed potatoes and maintain clean crop rows.",
+        "prevention": "Use certified seed potatoes and maintain clean crop rows."
     },
 
     "Tomato_Bacterial_spot": {
@@ -137,9 +140,9 @@ RECOMMENDATIONS = {
             "Use drip or base watering instead of overhead irrigation.",
             "Sanitize gardening tools.",
             "Avoid handling plants when foliage is wet.",
-            "Use approved copper-based treatments according to local guidance.",
+            "Use approved copper-based treatments according to local guidance."
         ],
-        "prevention": "Use disease-free seed and practice crop rotation.",
+        "prevention": "Use disease-free seed and practice crop rotation."
     },
 
     "Tomato_Early_blight": {
@@ -153,9 +156,9 @@ RECOMMENDATIONS = {
             "Use mulch to reduce soil splash.",
             "Improve airflow around plants.",
             "Water at the base of the plant.",
-            "Use approved fungicides according to label instructions.",
+            "Use approved fungicides according to label instructions."
         ],
-        "prevention": "Use tolerant varieties, good spacing, sanitation, and crop rotation.",
+        "prevention": "Use tolerant varieties, good spacing, sanitation, and crop rotation."
     },
 
     "Tomato_Late_blight": {
@@ -169,9 +172,9 @@ RECOMMENDATIONS = {
             "Keep foliage dry where possible.",
             "Avoid overhead watering.",
             "Use locally approved fungicides when appropriate.",
-            "Monitor nearby potato and tomato plants.",
+            "Monitor nearby potato and tomato plants."
         ],
-        "prevention": "Use resistant varieties where available and avoid infected planting material.",
+        "prevention": "Use resistant varieties where available and avoid infected planting material."
     },
 
     "Tomato_Leaf_Mold": {
@@ -185,9 +188,9 @@ RECOMMENDATIONS = {
             "Reduce dense foliage.",
             "Water at the soil surface.",
             "Remove severely affected leaves.",
-            "Use approved fungicides when appropriate.",
+            "Use approved fungicides when appropriate."
         ],
-        "prevention": "Maintain plant spacing and select resistant varieties where available.",
+        "prevention": "Maintain plant spacing and select resistant varieties where available."
     },
 
     "Tomato_Septoria_leaf_spot": {
@@ -201,9 +204,9 @@ RECOMMENDATIONS = {
             "Use mulch to reduce soil splash.",
             "Water at the base of plants.",
             "Improve airflow.",
-            "Use approved fungicides according to local guidance.",
+            "Use approved fungicides according to local guidance."
         ],
-        "prevention": "Practice crop rotation and remove infected plant debris.",
+        "prevention": "Practice crop rotation and remove infected plant debris."
     },
 
     "Tomato_Spider_mites_Two_spotted_spider_mite": {
@@ -217,9 +220,9 @@ RECOMMENDATIONS = {
             "Wash foliage with water where appropriate.",
             "Use appropriate insecticidal or horticultural products according to label instructions.",
             "Monitor populations regularly.",
-            "Remove severely affected foliage.",
+            "Remove severely affected foliage."
         ],
-        "prevention": "Reduce plant stress and monitor regularly for mites.",
+        "prevention": "Reduce plant stress and monitor regularly for mites."
     },
 
     "Tomato__Target_Spot": {
@@ -233,9 +236,9 @@ RECOMMENDATIONS = {
             "Improve airflow.",
             "Reduce soil splash.",
             "Maintain good weed control.",
-            "Use approved fungicides when appropriate.",
+            "Use approved fungicides when appropriate."
         ],
-        "prevention": "Practice crop rotation and remove old crop residue.",
+        "prevention": "Practice crop rotation and remove old crop residue."
     },
 
     "Tomato__Tomato_YellowLeaf__Curl_Virus": {
@@ -249,9 +252,9 @@ RECOMMENDATIONS = {
             "Monitor and manage whitefly populations.",
             "Use insect-exclusion netting for young plants where practical.",
             "Control nearby weeds that may host pests.",
-            "Use resistant varieties where available.",
+            "Use resistant varieties where available."
         ],
-        "prevention": "Use certified planting material and resistant varieties where available.",
+        "prevention": "Use certified planting material and resistant varieties where available."
     },
 
     "Tomato__Tomato_mosaic_virus": {
@@ -265,9 +268,9 @@ RECOMMENDATIONS = {
             "Wash hands after handling infected plants.",
             "Disinfect gardening tools.",
             "Avoid spreading plant sap between plants.",
-            "Use resistant planting material where available.",
+            "Use resistant planting material where available."
         ],
-        "prevention": "Use disease-free seeds and maintain good sanitation.",
+        "prevention": "Use disease-free seeds and maintain good sanitation."
     },
 
     "Tomato_healthy": {
@@ -280,10 +283,10 @@ RECOMMENDATIONS = {
             "Maintain consistent soil moisture.",
             "Provide balanced plant nutrition.",
             "Maintain good airflow.",
-            "Monitor foliage regularly.",
+            "Monitor foliage regularly."
         ],
-        "prevention": "Maintain sanitation, crop rotation, and regular plant inspection.",
-    },
+        "prevention": "Maintain sanitation, crop rotation, and regular plant inspection."
+    }
 }
 
 
@@ -295,7 +298,7 @@ st.set_page_config(
     page_title="AI Plant Health Assistant",
     page_icon="🌱",
     layout="centered",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="expanded"
 )
 
 
@@ -338,13 +341,12 @@ CUSTOM_CSS = """
     line-height: 1.5;
 }
 
-.dashboard-card {
-    background: #1e293b;
+.guide-box {
+    background: rgba(30, 41, 59, 0.7);
     border-radius: 12px;
-    padding: 1.4rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     border: 1px solid #334155;
-    margin-bottom: 1.2rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
 }
 
 .badge-healthy {
@@ -380,44 +382,35 @@ CUSTOM_CSS = """
     letter-spacing: 0.5px;
 }
 
-.guide-box {
-    background: rgba(30, 41, 59, 0.7);
-    border-radius: 12px;
-    border: 1px solid #334155;
-    padding: 1.5rem;
-    margin-top: 1rem;
-}
-
 </style>
 """
 
-st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+st.markdown(
+    CUSTOM_CSS,
+    unsafe_allow_html=True
+)
 
 
 # ============================================================
 # MODEL LOADER
 # ============================================================
 
-@st.cache_resource(show_spinner="Loading AI plant disease model...")
+@st.cache_resource(
+    show_spinner="Loading AI plant disease model..."
+)
 def load_model():
 
     if not os.path.isfile(MODEL_PATH):
+
         raise FileNotFoundError(
-            f"""
-Model file not found.
-
-Expected location:
-{MODEL_PATH}
-
-Make sure 'plant_disease_baseline.keras'
-is inside the same GitHub folder as app.py.
-"""
+            f"Model file not found at: {MODEL_PATH}"
         )
 
-    return tf.keras.models.load_model(MODEL_PATH)
+    return tf.keras.models.load_model(
+        MODEL_PATH
+    )
 
 
-# Load model
 model = load_model()
 
 
@@ -433,37 +426,57 @@ class_names = get_class_names()
 
 
 # ============================================================
-# AI PREDICTION
+# PREDICTION
 # ============================================================
 
 def predict_disease(image):
 
     start_time = time.time()
 
-    image_resized = tf.image.resize(image, IMG_SIZE)
-    image_array = tf.expand_dims(image_resized, axis=0)
+    image_resized = tf.image.resize(
+        image,
+        IMG_SIZE
+    )
+
+    image_array = tf.expand_dims(
+        image_resized,
+        axis=0
+    )
 
     raw_predictions = model.predict(
         image_array,
         verbose=0
     )[0]
 
-    inference_ms = (time.time() - start_time) * 1000
+    inference_ms = (
+        time.time() - start_time
+    ) * 1000
 
-    top_indices = np.argsort(raw_predictions)[::-1]
+    top_indices = np.argsort(
+        raw_predictions
+    )[::-1]
 
-    predicted_index = int(top_indices[0])
+    predicted_index = int(
+        top_indices[0]
+    )
 
-    predicted_class = class_names[predicted_index]
+    predicted_class = class_names[
+        predicted_index
+    ]
 
     confidence = float(
-        raw_predictions[predicted_index] * 100
+        raw_predictions[
+            predicted_index
+        ] * 100
     )
 
     top3 = [
         (
             class_names[int(idx)],
-            float(raw_predictions[int(idx)] * 100)
+            float(
+                raw_predictions[int(idx)]
+                * 100
+            )
         )
         for idx in top_indices[:3]
     ]
@@ -477,7 +490,7 @@ def predict_disease(image):
 
 
 # ============================================================
-# LEAF IMAGE VALIDATION
+# LEAF VALIDATION
 # ============================================================
 
 def is_likely_leaf_image(image):
@@ -506,7 +519,9 @@ def is_likely_leaf_image(image):
     )
 
     leaf_like_ratio = float(
-        np.mean(green | brown_yellow)
+        np.mean(
+            green | brown_yellow
+        )
     )
 
     saturated_ratio = float(
@@ -611,8 +626,13 @@ def estimate_severity(image):
         np.ones((3, 3), np.uint8)
     )
 
-    leaf_pixels = np.sum(leaf_mask)
-    affected_pixels = np.sum(affected_mask)
+    leaf_pixels = np.sum(
+        leaf_mask
+    )
+
+    affected_pixels = np.sum(
+        affected_mask
+    )
 
     if leaf_pixels == 0:
         return 0.0, "Unknown"
@@ -650,7 +670,7 @@ def estimate_severity(image):
 
 
 # ============================================================
-# DIAGNOSTIC REPORT
+# REPORT GENERATOR
 # ============================================================
 
 def generate_diagnostic_report(
@@ -709,7 +729,7 @@ def generate_diagnostic_report(
         )
 
         diagnosis_header = (
-            f"Primary Diagnosis    : {title}"
+            f"Primary Diagnosis : {title}"
         )
 
         action_header = (
@@ -755,15 +775,15 @@ def generate_diagnostic_report(
         )
 
         prevention_body = (
-            "  • Use a clear, focused image with "
-            "good lighting.\n"
+            "  • Use a clear, focused image "
+            "with good lighting.\n"
             "  • Make sure the crop is Tomato, "
             "Potato, or Bell Pepper.\n"
-            "  • Consult an agricultural professional "
-            "if symptoms persist."
+            "  • Consult a local agricultural "
+            "professional if symptoms persist."
         )
 
-    report_lines = [
+    lines = [
 
         "=" * 60,
 
@@ -773,48 +793,48 @@ def generate_diagnostic_report(
 
         f"Generated Timestamp : {timestamp}",
 
-        "Inference Model     : Plant Disease CNN (128x128)",
+        "Inference Model : Plant Disease CNN (128x128)",
 
-        f"Diagnostic Status   : {status_label}",
+        f"Diagnostic Status : {status_label}",
 
-        f"Target Crop Group   : {crop}",
+        f"Target Crop Group : {crop}",
 
         diagnosis_header,
 
-        f"Suspected Pathogen  : {pathogen}",
+        f"Suspected Pathogen : {pathogen}",
 
         (
-            f"Model Confidence    : "
+            f"Model Confidence : "
             f"{confidence:.2f}% "
             f"(Threshold: "
             f"{CONFIDENCE_THRESHOLD * 100:.0f}%)"
         ),
 
         (
-            f"Leaf Area Affected  : "
+            f"Leaf Area Affected : "
             f"{affected_pct:.2f}% (Estimated)"
         ),
 
-        f"Severity Rating     : {severity}",
+        f"Severity Rating : {severity}",
 
         "-" * 60,
 
-        "TOP PREDICTION PROBABILITIES:",
+        "TOP PREDICTION PROBABILITIES:"
 
     ]
 
-    for rank, (c_name, prob) in enumerate(
+    for rank, (name, probability) in enumerate(
         top3,
         start=1
     ):
 
-        report_lines.append(
+        lines.append(
             f"  {rank}. "
-            f"{c_name.replace('_', ' ')} : "
-            f"{prob:.2f}%"
+            f"{name.replace('_', ' ')} : "
+            f"{probability:.2f}%"
         )
 
-    report_lines.extend([
+    lines.extend([
 
         "-" * 60,
 
@@ -840,11 +860,11 @@ def generate_diagnostic_report(
 
         "For important crop decisions, consult a local agricultural extension professional.",
 
-        "=" * 60,
+        "=" * 60
 
     ])
 
-    return "\n".join(report_lines)
+    return "\n".join(lines)
 
 
 # ============================================================
@@ -863,13 +883,12 @@ with st.sidebar:
 
 
 # ============================================================
-# HERO
+# HERO HEADER
 # ============================================================
 
 st.markdown(
     """
     <div class="hero-card">
-
         <div class="hero-title">
             🌱 AI Plant Health Assistant
         </div>
@@ -878,7 +897,6 @@ st.markdown(
             Upload a plant leaf image and the AI
             will estimate the plant condition.
         </p>
-
     </div>
     """,
     unsafe_allow_html=True
@@ -934,7 +952,7 @@ if uploaded_file is not None:
 
 
 # ============================================================
-# MAIN ANALYSIS
+# ANALYSIS
 # ============================================================
 
 if input_image_rgb is not None:
@@ -943,7 +961,9 @@ if input_image_rgb is not None:
     # LEAF INSPECTION
     # --------------------------------------------------------
 
-    st.subheader("🍃 Leaf Inspection")
+    st.subheader(
+        "🍃 Leaf Inspection"
+    )
 
     st.image(
         input_image_rgb,
@@ -953,7 +973,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # LEAF VALIDATION
+    # VALIDATION
     # --------------------------------------------------------
 
     if not is_likely_leaf_image(
@@ -968,8 +988,8 @@ if input_image_rgb is not None:
 
         st.warning(
             "🚫 **Unsupported image detected**\n\n"
-            "The uploaded image does not appear to contain "
-            "a clear plant leaf.\n\n"
+            "The uploaded image does not appear to "
+            "contain a clear plant leaf.\n\n"
             "This AI model supports **Tomato, Potato, "
             "and Bell Pepper leaves**.\n\n"
             "👉 Please upload a clear, well-lit photo "
@@ -980,7 +1000,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # MODEL PREDICTION
+    # PREDICTION
     # --------------------------------------------------------
 
     with st.spinner(
@@ -998,7 +1018,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # DISEASE INFORMATION
+    # RESULT INFORMATION
     # --------------------------------------------------------
 
     rec_info = RECOMMENDATIONS.get(
@@ -1055,7 +1075,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # RESULTS
+    # RESULTS HEADER
     # --------------------------------------------------------
 
     st.divider()
@@ -1110,7 +1130,6 @@ if input_image_rgb is not None:
             f"{rec_info.get('pathogen', 'N/A')}"
         )
 
-
     else:
 
         badge_html = (
@@ -1127,7 +1146,7 @@ if input_image_rgb is not None:
 
         st.caption(
             "The AI confidence is below the "
-            "reliability threshold of 60%."
+            "reliability threshold (60%)."
         )
 
 
@@ -1156,8 +1175,7 @@ if input_image_rgb is not None:
 
             st.metric(
                 "Top Candidate",
-                f"{disease_title} "
-                "(Unconfirmed)"
+                f"{disease_title} (Unconfirmed)"
             )
 
         st.metric(
@@ -1170,21 +1188,16 @@ if input_image_rgb is not None:
 
         if confidence >= 85:
 
-            confidence_label = (
-                "High Certainty"
-            )
+            confidence_label = "High Certainty"
 
         elif is_confident:
 
-            confidence_label = (
-                "Moderate (>=60%)"
-            )
+            confidence_label = "Moderate (>=60%)"
 
         else:
 
-            confidence_label = (
-                "Low (<60%)"
-            )
+            confidence_label = "Low (<60%)"
+
 
         st.metric(
             "Confidence",
@@ -1204,7 +1217,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # TOP 3 PREDICTIONS
+    # TOP PREDICTIONS
     # --------------------------------------------------------
 
     st.divider()
@@ -1255,10 +1268,8 @@ if input_image_rgb is not None:
             "⚠️ **Low-confidence result**\n\n"
             "The AI is not sufficiently confident "
             "in this prediction.\n\n"
-            "The image may be unclear or may not "
-            "match the crops supported by this model.\n\n"
-            "The result should **not** be treated as "
-            "a confirmed disease diagnosis.\n\n"
+            "The result is **unconfirmed** and should "
+            "not be treated as a confirmed disease diagnosis.\n\n"
             "👉 Upload a clear image of a Tomato, "
             "Potato, or Bell Pepper leaf under "
             "good lighting."
@@ -1273,7 +1284,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # TREATMENT & RECOMMENDATIONS
+    # RECOMMENDATIONS
     # --------------------------------------------------------
 
     st.markdown(
@@ -1300,7 +1311,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # ACTIONS
+    # ACTIONS TAB
     # --------------------------------------------------------
 
     with act_tab1:
@@ -1317,21 +1328,13 @@ if input_image_rgb is not None:
                 []
             )
 
-            if actions_list:
+            for idx, action in enumerate(
+                actions_list,
+                start=1
+            ):
 
-                for idx, action in enumerate(
-                    actions_list,
-                    start=1
-                ):
-
-                    st.markdown(
-                        f"**{idx}.** {action}"
-                    )
-
-            else:
-
-                st.write(
-                    "No specific actions listed."
+                st.markdown(
+                    f"**{idx}.** {action}"
                 )
 
         else:
@@ -1351,19 +1354,17 @@ if input_image_rgb is not None:
                 """
                 **Next steps:**
 
-                - Verify that the crop is Tomato,
-                  Potato, or Bell Pepper.
+                - Verify the crop is Tomato, Potato, or Bell Pepper.
                 - Take a clear, focused image.
                 - Use good natural lighting.
                 - Keep the leaf fully visible.
-                - If symptoms persist, consult a
-                  local agricultural specialist.
+                - Consult a local agricultural specialist if symptoms persist.
                 """
             )
 
 
     # --------------------------------------------------------
-    # DESCRIPTION
+    # DESCRIPTION TAB
     # --------------------------------------------------------
 
     with act_tab2:
@@ -1382,8 +1383,7 @@ if input_image_rgb is not None:
             )
 
             st.markdown(
-                f"**Identified Crop:** "
-                f"{plant_crop}"
+                f"**Identified Crop:** {plant_crop}"
             )
 
             st.markdown(
@@ -1401,19 +1401,17 @@ if input_image_rgb is not None:
             st.write(
                 f"The closest matching condition "
                 f"was **{disease_title}**, with "
-                f"{confidence:.2f}% confidence. "
-                f"Because confidence is below 60%, "
-                f"this result is unconfirmed."
+                f"{confidence:.2f}% confidence."
             )
 
             st.write(
-                "Disease-specific treatment should "
-                "not be based on this prediction."
+                "Because confidence is below 60%, "
+                "this result is unconfirmed."
             )
 
 
     # --------------------------------------------------------
-    # PREVENTION
+    # PREVENTION TAB
     # --------------------------------------------------------
 
     with act_tab3:
@@ -1451,7 +1449,7 @@ if input_image_rgb is not None:
 
 
     # --------------------------------------------------------
-    # REPORT
+    # EXPORT TAB
     # --------------------------------------------------------
 
     with act_tab4:
@@ -1475,22 +1473,14 @@ if input_image_rgb is not None:
         )
 
         st.download_button(
-            label=(
-                "📥 Download Diagnostic "
-                "Report (.txt)"
-            ),
-
+            label="📥 Download Diagnostic Report (.txt)",
             data=report_text,
-
             file_name=(
                 f"plant_health_report_"
                 f"{predicted_disease}_"
                 f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
             ),
-
-            mime="text/plain",
-
-            use_container_width=False
+            mime="text/plain"
         )
 
 

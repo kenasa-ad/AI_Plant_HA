@@ -1414,52 +1414,21 @@ if input_image_rgb is not None:
 # ============================================================
 
 else:
+    st.info("👈 Please upload a leaf image above to begin.")
 
-    st.info(
-        "👈 Please **upload a leaf image** above to begin."
-    )
+    st.subheader("🚀 Getting Started")
 
-    st.markdown(
-        """
-        <div class="guide-box">
-            <h3 style="margin-top: 0; color: #ecfdf5;">
-                🚀 Getting Started
-            </h3>
+    st.write("Follow these steps to analyze your plant leaf:")
 
-            <p style="color: #cbd5e1;">
-                Follow these steps to analyze your plant leaf:
-            </p>
+    st.markdown("""
+    1. **Upload a Leaf Image:** Provide a clear JPG, JPEG, or PNG photo of a single Tomato, Potato, or Pepper leaf.
 
-            <ol style="color: #cbd5e1; line-height: 1.8;">
-                <li>
-                    <strong>Upload a Leaf Image:</strong>
-                    Provide a clear JPG, JPEG, or PNG photo
-                    of a single Tomato, Potato, or Pepper leaf.
-                </li>
+    2. **AI Diagnosis:** The CNN classifies the image and provides a confidence score.
 
-                <li>
-                    <strong>AI Diagnosis:</strong>
-                    The CNN classifies the image and provides
-                    a confidence score.
-                </li>
+    3. **Review Results:** Review the predicted condition, severity estimate, recommendations, and top predictions.
 
-                <li>
-                    <strong>Review Results:</strong>
-                    Review the predicted condition,
-                    severity estimate, recommendations,
-                    and top predictions.
-                </li>
-
-                <li>
-                    <strong>Export Report:</strong>
-                    Download the diagnostic summary.
-                </li>
-            </ol>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
+    4. **Export Report:** Download the diagnostic summary.
+    """)
 
 # ============================================================
 # FOOTER

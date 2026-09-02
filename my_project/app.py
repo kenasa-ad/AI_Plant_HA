@@ -10,12 +10,24 @@ import streamlit as st
 
 
 # ============================================================
+# PAGE CONFIGURATION
+# ============================================================
+
+st.set_page_config(
+    page_title="AI Plant Health Assistant",
+    page_icon="🌱",
+    layout="centered",
+    initial_sidebar_state="expanded"
+)
+
+
+# ============================================================
 # CONFIGURATION
 # ============================================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# IMPORTANT: model must be in the same folder as app.py
+# The model must be inside the same folder as app.py
 MODEL_PATH = os.path.join(
     BASE_DIR,
     "plant_disease_baseline.keras"
@@ -291,18 +303,6 @@ RECOMMENDATIONS = {
 
 
 # ============================================================
-# PAGE CONFIGURATION
-# ============================================================
-
-st.set_page_config(
-    page_title="AI Plant Health Assistant",
-    page_icon="🌱",
-    layout="centered",
-    initial_sidebar_state="expanded"
-)
-
-
-# ============================================================
 # CUSTOM CSS
 # ============================================================
 
@@ -395,34 +395,21 @@ st.markdown(
 # MODEL LOADER
 # ============================================================
 
-@st.cache_resource(
-    show_spinner="Loading AI plant disease model..."
-)
+@st.cache_resource(show_spinner="Loading AI plant disease model...")
 def load_model():
 
     if not os.path.isfile(MODEL_PATH):
-
         raise FileNotFoundError(
-            f"Model file not found at: {MODEL_PATH}"
+            "Model file not found: "
+            f"{MODEL_PATH}\n\n"
+            "Make sure plant_disease_baseline.keras "
+            "is inside the same folder as app.py."
         )
 
-    return tf.keras.models.load_model(
-        MODEL_PATH
-    )
+    return tf.keras.models.load_model(MODEL_PATH)
 
 
 model = load_model()
-
-
-# ============================================================
-# CLASS NAMES
-# ============================================================
-
-def get_class_names():
-    return CLASS_NAMES
-
-
-class_names = get_class_names()
 
 
 # ============================================================
@@ -460,23 +447,18 @@ def predict_disease(image):
         top_indices[0]
     )
 
-    predicted_class = class_names[
+    predicted_class = CLASS_NAMES[
         predicted_index
     ]
 
     confidence = float(
-        raw_predictions[
-            predicted_index
-        ] * 100
+        raw_predictions[predicted_index] * 100
     )
 
     top3 = [
         (
-            class_names[int(idx)],
-            float(
-                raw_predictions[int(idx)]
-                * 100
-            )
+            CLASS_NAMES[int(idx)],
+            float(raw_predictions[int(idx)] * 100)
         )
         for idx in top_indices[:3]
     ]
@@ -519,9 +501,7 @@ def is_likely_leaf_image(image):
     )
 
     leaf_like_ratio = float(
-        np.mean(
-            green | brown_yellow
-        )
+        np.mean(green | brown_yellow)
     )
 
     saturated_ratio = float(
@@ -626,13 +606,9 @@ def estimate_severity(image):
         np.ones((3, 3), np.uint8)
     )
 
-    leaf_pixels = np.sum(
-        leaf_mask
-    )
+    leaf_pixels = np.sum(leaf_mask)
 
-    affected_pixels = np.sum(
-        affected_mask
-    )
+    affected_pixels = np.sum(affected_mask)
 
     if leaf_pixels == 0:
         return 0.0, "Unknown"
@@ -653,13 +629,10 @@ def estimate_severity(image):
 
     if affected_percentage < 10:
         severity = "Low"
-
     elif affected_percentage < 30:
         severity = "Moderate"
-
     elif affected_percentage < 60:
         severity = "High"
-
     else:
         severity = "Severe"
 
@@ -784,50 +757,34 @@ def generate_diagnostic_report(
         )
 
     lines = [
-
         "=" * 60,
-
         "AI PLANT HEALTH ASSISTANT - DIAGNOSTIC REPORT",
-
         "=" * 60,
-
         f"Generated Timestamp : {timestamp}",
-
         "Inference Model : Plant Disease CNN (128x128)",
-
         f"Diagnostic Status : {status_label}",
-
         f"Target Crop Group : {crop}",
-
         diagnosis_header,
-
         f"Suspected Pathogen : {pathogen}",
-
         (
             f"Model Confidence : "
             f"{confidence:.2f}% "
             f"(Threshold: "
             f"{CONFIDENCE_THRESHOLD * 100:.0f}%)"
         ),
-
         (
             f"Leaf Area Affected : "
             f"{affected_pct:.2f}% (Estimated)"
         ),
-
         f"Severity Rating : {severity}",
-
         "-" * 60,
-
         "TOP PREDICTION PROBABILITIES:"
-
     ]
 
     for rank, (name, probability) in enumerate(
         top3,
         start=1
     ):
-
         lines.append(
             f"  {rank}. "
             f"{name.replace('_', ' ')} : "
@@ -835,33 +792,19 @@ def generate_diagnostic_report(
         )
 
     lines.extend([
-
         "-" * 60,
-
         "PATHOLOGY DESCRIPTION:",
-
         description,
-
         "-" * 60,
-
         action_header,
-
         action_body,
-
         "-" * 60,
-
         "PREVENTION & NEXT STEPS:",
-
         prevention_body,
-
         "=" * 60,
-
         "DISCLAIMER: This diagnostic estimate is generated by AI and computer vision models.",
-
         "For important crop decisions, consult a local agricultural extension professional.",
-
         "=" * 60
-
     ])
 
     return "\n".join(lines)
@@ -889,13 +832,9 @@ with st.sidebar:
 st.markdown(
     """
     <div class="hero-card">
-        <div class="hero-title">
-            🌱 AI Plant Health Assistant
-        </div>
-
+        <div class="hero-title">🌱 AI Plant Health Assistant</div>
         <p class="hero-subtitle">
-            Upload a plant leaf image and the AI
-            will estimate the plant condition.
+            Upload a plant leaf image and the AI will estimate the plant condition.
         </p>
     </div>
     """,
@@ -1118,8 +1057,7 @@ if input_image_rgb is not None:
 
 
         st.markdown(
-            f"### {disease_title} "
-            f"&nbsp; {badge_html}",
+            f"### {disease_title} &nbsp; {badge_html}",
             unsafe_allow_html=True
         )
 
@@ -1139,8 +1077,7 @@ if input_image_rgb is not None:
         )
 
         st.markdown(
-            f"### Uncertain Prediction "
-            f"&nbsp; {badge_html}",
+            f"### Uncertain Prediction &nbsp; {badge_html}",
             unsafe_allow_html=True
         )
 
@@ -1227,17 +1164,14 @@ if input_image_rgb is not None:
     )
 
     chart_df = pd.DataFrame({
-
         "Condition": [
             c[0].replace("_", " ")
             for c in top3_preds
         ],
-
         "Probability (%)": [
             round(c[1], 2)
             for c in top3_preds
         ]
-
     }).sort_values(
         "Probability (%)",
         ascending=True
@@ -1245,16 +1179,9 @@ if input_image_rgb is not None:
 
 
     st.bar_chart(
-        chart_df.set_index(
-            "Condition"
-        ),
+        chart_df.set_index("Condition"),
         horizontal=True,
-        use_container_width=True,
-        color=(
-            "#10b981"
-            if is_confident
-            else "#f59e0b"
-        )
+        use_container_width=True
     )
 
 
@@ -1319,8 +1246,7 @@ if input_image_rgb is not None:
         if is_confident:
 
             st.markdown(
-                f"#### Recommended Actions for "
-                f"**{disease_title}**"
+                f"#### Recommended Actions for **{disease_title}**"
             )
 
             actions_list = rec_info.get(
@@ -1394,8 +1320,7 @@ if input_image_rgb is not None:
         else:
 
             st.markdown(
-                "#### Candidate Pathology "
-                "Overview (Unconfirmed)"
+                "#### Candidate Pathology Overview (Unconfirmed)"
             )
 
             st.write(
@@ -1497,7 +1422,6 @@ else:
     st.markdown(
         """
         <div class="guide-box">
-
             <h3 style="margin-top: 0; color: #ecfdf5;">
                 🚀 Getting Started
             </h3>
@@ -1507,7 +1431,6 @@ else:
             </p>
 
             <ol style="color: #cbd5e1; line-height: 1.8;">
-
                 <li>
                     <strong>Upload a Leaf Image:</strong>
                     Provide a clear JPG, JPEG, or PNG photo
@@ -1531,9 +1454,7 @@ else:
                     <strong>Export Report:</strong>
                     Download the diagnostic summary.
                 </li>
-
             </ol>
-
         </div>
         """,
         unsafe_allow_html=True
@@ -1547,6 +1468,5 @@ else:
 st.divider()
 
 st.caption(
-    "AI Plant Health Assistant • "
-    "CNN + Computer Vision"
+    "AI Plant Health Assistant • CNN + Computer Vision"
 )
